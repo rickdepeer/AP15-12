@@ -20,6 +20,7 @@
 		var boordGroote:int = 10;
 		var beginX:int = 10;
 		var beginY:int = 30;
+		var direct:int = 90;
 		
 		public function script() 
 		{	
@@ -44,34 +45,61 @@
 			addChild(pion);
 			addChild(text2)
 			addChild(dobbel)
-			
 		}
 		
 		public function frameLoop(e:Event):void
 		{
-			//trace(pion.x + " " + totalX)
+			trace("pionx:" + pion.x + " totalx" + totalX + " direction:" + direct + " piony:" + pion.y + " totaly:" + totalY)
 			text2.textfield2.text = "Aantal zetten: " + zetten
-			if (pion.x < totalX)
+			if (pion.x < totalX && direct == 90)
 			{
 				pion.x++;
 				pion.x++;
 				dobbel.mouseEnabled = false;
 			}
-			if (pion.y < totalY)
+			if (pion.y < totalY &&  direct == 180)
 			{
 				pion.y++;
 				pion.y++;
 				dobbel.mouseEnabled = false;
 			}
+			/*if (pion.x < totalX && direct == 270)
+			{
+				pion.x--;
+				pion.x--;
+				dobbel.mouseEnabled = false;
+			}
+			if (pion.y < totalX &&  direct == 0)
+			{
+				pion.y--;
+				pion.y--;
+				dobbel.mouseEnabled = false;
+			}*/
 			if (pion.x == totalX+1)
 			{
 				dobbel.mouseEnabled = true;
 			}
 			
+			if (totalX >= beginX+(boordGroote+1)*30)
+			{
+				direct = 180
+				if(direct == 90)
+				{
+					totalY = totalX-pion.x;
+				}
+			}
+			if (totalY >= beginY+(boordGroote+1)*30)
+			{
+				direct = 270
+			}
+			/*if (totalX >= (boordGroote+1)*30)
+			{
+				direct += 90
+			}
 			if (totalX >= (boordGroote+1)*30)
 			{
-				totalY = totalX-boordGroote*30
-			}
+				direct += 90
+			}*/
 			
 			/*if (pion.x > beginX+(boordGroote-1)*30)
 			{
@@ -143,23 +171,18 @@
 		
 		public function dobbelRandom():int
 		{
-			if (totalX < (boordGroote+1)*30)
+			var getalRandom:int = Math.floor(Math.random()*7);
+			if (getalRandom < 1)
 			{
-				var getalRandom:int = Math.floor(Math.random()*7);
-				if (getalRandom < 1)
-				{
-					getalRandom = 1;
-				}
+				getalRandom = 1;
+			}
+			if(direct == 90)
+			{
 				totalX += 30*getalRandom;
 			}
-			else
+			if(direct == 180)
 			{
-				var getalRandom:int = Math.floor(Math.random()*7);
-				if (getalRandom < 1)
-				{
-					getalRandom = 1;
-				}
-				totalY += 30*getalRandom;
+				totalY += totalX-pion.x+30*getalRandom;
 			}
 			return(getalRandom);
 		}
