@@ -17,10 +17,11 @@
 		var gewonnen:Gewonnen = new Gewonnen();
 		var text2:Textfield2 = new Textfield2();
 		var beweeg:Boolean = new Boolean();
-		var boordGroote:int = 10;
-		var beginX:int = 10;
+		var boordGroote:int = 20;
+		var beginX:int = 30;
 		var beginY:int = 30;
 		var direct:int = 90;
+		var total:int = 0;
 		
 		public function script() 
 		{	
@@ -33,7 +34,8 @@
 			text2.x = 150;
 			text2.y = 100;
 			
-			pion.y = 10;
+			pion.x = beginX+5;
+			pion.y = beginY-20;
 			
 			dobbel.stop();
 			
@@ -49,70 +51,91 @@
 		
 		public function frameLoop(e:Event):void
 		{
-			trace("pionx:" + pion.x + " totalx" + totalX + " direction:" + direct + " piony:" + pion.y + " totaly:" + totalY)
+			trace("pion-x:" + pion.x + " total-x:" + totalX  + " pion-y:" + pion.y + " total-y:" + totalY + " direction:" + direct + " total:" + total)
 			text2.textfield2.text = "Aantal zetten: " + zetten
-			if (pion.x < totalX && direct == 90)
+			if(direct == 90 && total != 0)
 			{
 				pion.x++;
 				pion.x++;
+				total--;
+				total--;
 				dobbel.mouseEnabled = false;
 			}
-			if (pion.y < totalY &&  direct == 180)
+			if(direct == 180 && total != 0)
 			{
 				pion.y++;
 				pion.y++;
+				total--;
+				total--;
 				dobbel.mouseEnabled = false;
 			}
-			/*if (pion.x < totalX && direct == 270)
+			if(direct == 270 && total != 0)
 			{
 				pion.x--;
 				pion.x--;
+				total--;
+				total--;
 				dobbel.mouseEnabled = false;
 			}
-			if (pion.y < totalX &&  direct == 0)
+			if(direct == 0 && total != 0)
 			{
 				pion.y--;
 				pion.y--;
+				total--;
+				total--;
 				dobbel.mouseEnabled = false;
-			}*/
-			if (pion.x == totalX+1)
+			}
+			if(total == 0)
 			{
 				dobbel.mouseEnabled = true;
 			}
-			
-			if (totalX >= beginX+(boordGroote+1)*30)
+			if (direct == 90)
 			{
-				direct = 180
-				if(direct == 90)
+				totalX = total;
+			}
+			if (direct == 180)
+			{
+				totalY = total;
+			}
+			if (direct == 270)
+			{
+				totalX = total;
+				totalX *= -1;
+			}
+			if (direct == 0)
+			{
+				totalY = total;
+				totalY *= -1;
+			}
+
+			
+			if (pion.x >= beginX+5+(boordGroote-1)*30)
+			{
+				if (direct == 90)
 				{
-					totalY = totalX-pion.x;
+					direct = 180
 				}
 			}
-			if (totalY >= beginY+(boordGroote+1)*30)
+			if (pion.y >= beginY-20+(boordGroote-1)*30)
 			{
-				direct = 270
+				if (direct == 180)
+				{
+					direct = 270
+				}
 			}
-			/*if (totalX >= (boordGroote+1)*30)
+			if (pion.x < beginX+5)
 			{
-				direct += 90
+				if (direct == 270)
+				{
+					pion.x = beginX+5
+					direct = 0
+				}
 			}
-			if (totalX >= (boordGroote+1)*30)
+			if ((pion.y > beginY && pion.y < beginY+ 30)&&(pion.x > beginX && pion.x < beginX+30))
 			{
-				direct += 90
-			}*/
-			
-			/*if (pion.x > beginX+(boordGroote-1)*30)
-			{
-				pion.x = 15+30*29;
 				gewonnen.textfield1.text = "Gewonnen!!\n" + "U heeft " + zetten + " zetten gezet.";
-				addChild(gewonnen);
+				addChild(gewonnen)
 			}
-			if (pion.y > beginY+(boordGroote-1)*30)
-			{
-				pion.y = 15+30*29;
-				gewonnen.textfield1.text = "Gewonnen!!\n" + "U heeft " + zetten + " zetten gezet.";
-				addChild(gewonnen);
-			}*/
 		}
 		
 		public function drawBoard(lengte, dobbelX, dobbelY):void
@@ -176,14 +199,8 @@
 			{
 				getalRandom = 1;
 			}
-			if(direct == 90)
-			{
-				totalX += 30*getalRandom;
-			}
-			if(direct == 180)
-			{
-				totalY += totalX-pion.x+30*getalRandom;
-			}
+			total += 30*getalRandom;
+
 			return(getalRandom);
 		}
 		
