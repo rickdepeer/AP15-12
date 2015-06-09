@@ -17,29 +17,32 @@
 		var gewonnen:Gewonnen = new Gewonnen();
 		var text2:Textfield2 = new Textfield2();
 		var beweeg:Boolean = new Boolean();
-		var boordGroote:int = 20;
+		var boordGroote:int = 10;
 		var beginX:int = 30;
 		var beginY:int = 30;
 		var direct:int = 90;
 		var total:int = 0;
+		var hoekWidth:int = 50;
+		var hoekHeight:int = 30;
+		var hoek:int = 0;
 		
 		public function script() 
 		{	
-			dobbel.x = beginX+boordGroote*15;
-			dobbel.y = beginY+boordGroote*15;
+			dobbel.x = beginX+boordGroote*hoekWidth/2;
+			dobbel.y = beginY+boordGroote*hoekWidth/2;
 			
-			gewonnen.x = 300;
-			gewonnen.y = 150;
+			gewonnen.x = beginY+boordGroote*hoekWidth/2;
+			gewonnen.y = beginY+boordGroote*hoekWidth/2;
 			
-			text2.x = 150;
-			text2.y = 100;
+			text2.x = beginY+boordGroote*hoekWidth/2-70;
+			text2.y = beginY+boordGroote*hoekWidth/2-100;
 			
 			pion.x = beginX+5;
 			pion.y = beginY-20;
 			
 			dobbel.stop();
 			
-			drawBoard(boordGroote,beginX,beginY);
+			drawBoard(boordGroote, beginX ,beginY, hoekWidth, hoekHeight);
 			
 			stage.addEventListener(Event.ENTER_FRAME, frameLoop);
 			dobbel.addEventListener(MouseEvent.CLICK, dobbelClick);
@@ -51,7 +54,7 @@
 		
 		public function frameLoop(e:Event):void
 		{
-			trace("pion-x:" + pion.x + " total-x:" + totalX  + " pion-y:" + pion.y + " total-y:" + totalY + " direction:" + direct + " total:" + total)
+			trace("pion-x:" + pion.x + " total-x:" + totalX  + " pion-y:" + pion.y + " total-y:" + totalY + " direction:" + direct + " total:" + total + " hoek:" + hoek)
 			text2.textfield2.text = "Aantal zetten: " + zetten
 			if(direct == 90 && total != 0)
 			{
@@ -109,17 +112,34 @@
 			}
 
 			
-			if (pion.x >= beginX+5+(boordGroote-1)*30)
+			if (pion.x >= beginX+5+(boordGroote-1)*hoekWidth+hoekWidth/2)
 			{
 				if (direct == 90)
 				{
+					if (odd(hoekWidth/2))
+					{
+						total += hoekWidth/2+1
+					}
+					else
+					{
+						total += hoekWidth/2
+					}
 					direct = 180
+					
 				}
 			}
-			if (pion.y >= beginY-20+(boordGroote-1)*30)
+			if (pion.y >= beginY-20+(boordGroote-1)*hoekWidth+hoekWidth/2)
 			{
 				if (direct == 180)
 				{
+					if (odd(hoekWidth/2))
+					{
+						total += hoekWidth/2+1
+					}
+					else
+					{
+						total += hoekWidth/2
+					}
 					direct = 270
 				}
 			}
@@ -127,32 +147,54 @@
 			{
 				if (direct == 270)
 				{
+					if (odd(hoekWidth/2))
+					{
+						total += hoekWidth/2+1
+					}
+					else
+					{
+						total += hoekWidth/2
+					}
 					pion.x = beginX+5
 					direct = 0
 				}
 			}
 			if ((pion.y > beginY && pion.y < beginY+ 30)&&(pion.x > beginX && pion.x < beginX+30))
 			{
+				total = 0;
 				gewonnen.textfield1.text = "Gewonnen!!\n" + "U heeft " + zetten + " zetten gezet.";
 				addChild(gewonnen)
 			}
 		}
-		
-		public function drawBoard(lengte, dobbelX, dobbelY):void
+		function odd(nummer:int):Boolean
+		{
+			//check if the number is odd or even
+			if (nummer % 2 == 0)
+			{
+				return false;
+			}
+			else
+			{
+				return true;
+			}
+		}
+		public function drawBoard(lengte:int, dobbelX:int, dobbelY:int, dobbelWidth:int, dobbelHeight:int):void
 		{
 			var rechthoek:Shape = new Shape()
 			var cirkel:Shape = new Shape()
+			
+			if (hoekHeight < hoekWidth)
+			{
+				hoek = hoekHeight/2+5
+			}
 			
 			//top row
 			
 			for (var loopLengte:int = 0; loopLengte < lengte; loopLengte++)
 			{
 				rechthoek.graphics.lineStyle(3, 0x000000);
-				rechthoek.graphics.drawRect((10*(loopLengte*3)+dobbelX), 1+dobbelY, 30, 30);
+				rechthoek.graphics.drawRect((10*(loopLengte*(dobbelWidth/10))+dobbelX), 1+dobbelY, dobbelWidth, dobbelHeight);
 				addChild(rechthoek);
-				cirkel.graphics.lineStyle(3, 0x000000);
-				cirkel.graphics.drawCircle(15+((10*(loopLengte*3))+dobbelX), 16+dobbelY, 15);
-				addChild(cirkel);
 			}
 			
 			//right row
@@ -160,11 +202,8 @@
 			for (var loopLengte:int = 0; loopLengte < lengte; loopLengte++)
 			{
 				rechthoek.graphics.lineStyle(3, 0x000000);
-				rechthoek.graphics.drawRect(1+dobbelX+(lengte-1)*30,(10*(loopLengte*3)+dobbelY), 30, 30);
+				rechthoek.graphics.drawRect(1+dobbelX+(lengte-1)*dobbelWidth+hoek,(10*(loopLengte*(dobbelWidth/10))+dobbelY), dobbelHeight, dobbelWidth);
 				addChild(rechthoek);
-				cirkel.graphics.lineStyle(3, 0x000000);
-				cirkel.graphics.drawCircle(16+dobbelX+(lengte-1)*30, 15+((10*(loopLengte*3))+dobbelY), 15);
-				addChild(cirkel);
 			}
 			
 			//left row
@@ -172,11 +211,8 @@
 			for (var loopLengte:int = 0; loopLengte < lengte; loopLengte++)
 			{
 				rechthoek.graphics.lineStyle(3, 0x000000);
-				rechthoek.graphics.drawRect(1+dobbelX,(10*(loopLengte*3)+dobbelY), 30, 30);
+				rechthoek.graphics.drawRect(1+dobbelX,(10*(loopLengte*dobbelWidth/10)+dobbelY), dobbelHeight, dobbelWidth);
 				addChild(rechthoek);
-				cirkel.graphics.lineStyle(3, 0x000000);
-				cirkel.graphics.drawCircle(15+dobbelX, 16+((10*(loopLengte*3))+dobbelY), 15);
-				addChild(cirkel);
 			}			
 			
 			//bottom row
@@ -184,11 +220,8 @@
 			for (var loopLengte:int = 0; loopLengte < lengte; loopLengte++)
 			{
 				rechthoek.graphics.lineStyle(3, 0x000000);
-				rechthoek.graphics.drawRect((10*(loopLengte*3)+dobbelX), 1+dobbelY+(lengte-1)*30, 30, 30);
+				rechthoek.graphics.drawRect((10*(loopLengte*(dobbelWidth/10))+dobbelX), 1+dobbelY+(lengte-1)*dobbelWidth+hoek, dobbelWidth, dobbelHeight);
 				addChild(rechthoek);
-				cirkel.graphics.lineStyle(3, 0x000000);
-				cirkel.graphics.drawCircle(15+((10*(loopLengte*3))+dobbelX), 16+dobbelY+(lengte-1)*30, 15);
-				addChild(cirkel);
 			}
 		}
 		
@@ -199,7 +232,7 @@
 			{
 				getalRandom = 1;
 			}
-			total += 30*getalRandom;
+			total += hoekWidth*getalRandom;
 
 			return(getalRandom);
 		}
