@@ -17,13 +17,13 @@
 		var gewonnen:Gewonnen = new Gewonnen();
 		var text2:Textfield2 = new Textfield2();
 		var beweeg:Boolean = new Boolean();
-		var boordGroote:int = 10;
+		var boordGroote:int = 15;
 		var beginX:int = 30;
 		var beginY:int = 30;
 		var direct:int = 90;
 		var total:int = 0;
 		var hoekWidth:int = 50;
-		var hoekHeight:int = 30;
+		var hoekHeight:int = 50;
 		var hoek:int = 0;
 		
 		public function script() 
