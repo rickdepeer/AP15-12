@@ -4,6 +4,11 @@
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.display.Shape;
+	import flash.display.Loader;
+	import flash.net.URLRequest;
+	import flash.net.URLLoader;
+	import flash.net.URLVariables;
+	import flash.net.URLRequestMethod;
 	
 	public class script extends MovieClip 
 	{
@@ -34,6 +39,7 @@
 		var macelaviv:Macelaviv = new Macelaviv();
 		var bartsmit:Bartsmit = new Bartsmit();
 		var euromast:Euromast = new Euromast();
+		var mijnNaam:String = "Rick";
 
 		
 		public function script() 
@@ -122,7 +128,7 @@
 		
 		public function frameLoop(e:Event):void
 		{
-			trace("pion-x:" + pion.x + " total-x:" + totalX  + " pion-y:" + pion.y + " total-y:" + totalY + " direction:" + direct + " total:" + total + " hoek:" + hoek)
+			//trace("pion-x:" + pion.x + " total-x:" + totalX  + " pion-y:" + pion.y + " total-y:" + totalY + " direction:" + direct + " total:" + total + " hoek:" + hoek)
 			text2.textfield2.text = "Aantal zetten: " + zetten
 			if(direct == 90 && total != 0)
 			{
@@ -231,8 +237,21 @@
 			{
 				total = 0;
 				gewonnen.textfield1.text = "Gewonnen!!\n" + "U heeft " + zetten + " zetten gezet.";
+				removeChild(pion);
 				addChild(gewonnen)
+				
+				var scriptRequest:URLRequest = new URLRequest("http://ap15-12.ict-lab.nl/saveGameResults.php?name="+ mijnNaam +"&score=" + zetten);
+				var scriptLoader:URLLoader = new URLLoader();
+				scriptRequest.method = URLRequestMethod.POST;
+				scriptLoader.addEventListener("complete", onC);
+				scriptLoader.load(scriptRequest);
+				stage.frameRate = 0;
 			}
+		}
+		function onC(e) 
+		{
+			var someLoader:Loader = new Loader();
+			addChild(someLoader);
 		}
 		function odd(nummer:int):Boolean
 		{
