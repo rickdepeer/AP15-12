@@ -40,7 +40,13 @@
 		var bartsmit:Bartsmit = new Bartsmit();
 		var euromast:Euromast = new Euromast();
 		var mijnNaam:String = "Rick";
-
+		var beginscherm:Beginscherm = new Beginscherm();
+		var beginknop:Beginknop = new Beginknop();
+		var bkvraag:Bkvraag = new Bkvraag();
+		var bkant1:Bkant1 = new Bkant1();
+		var bkant2:Bkant2 = new Bkant2();
+		var score:int = 0
+		var vraaggesteld:Boolean = false;
 		
 		public function script() 
 		{	
@@ -92,6 +98,23 @@
 			euromast.width = hoekWidth;
 			/*Einde Foto's*/
 			
+			/*Vragen*/
+			bkvraag.x = 450;
+			bkvraag.y = 450;
+			
+			/*Einde vragen*/
+			
+			/*Antwoorden*/
+			bkant1.x = 350;
+			bkant1.y = 500;
+			
+			bkant2.x = 550;
+			bkant2.y = 500;
+			/*Einde antwoorden*/
+			
+			beginknop.x = 450;
+			beginknop.y = 500;
+			
 			dobbel.x = beginX+boordGroote*hoekWidth/2;
 			dobbel.y = beginY+boordGroote*hoekWidth/2;
 			
@@ -108,7 +131,18 @@
 			
 			stage.addEventListener(Event.ENTER_FRAME, frameLoop);
 			dobbel.addEventListener(MouseEvent.CLICK, dobbelClick);
+			beginknop.addEventListener(MouseEvent.CLICK, begin);
+			bkant1.addEventListener(MouseEvent.CLICK, bkant1_goed);
+			bkant2.addEventListener(MouseEvent.CLICK, bkant2_fout);
 			
+			addChild(beginscherm);
+			addChild(beginknop);
+		}
+		
+		public function begin(mEvt:MouseEvent):void
+		{
+			removeChild(beginscherm);
+			removeChild(beginknop);
 			addChild(euromast);
 			addChild(bartsmit);
 			addChild(macelaviv);
@@ -124,6 +158,23 @@
 			addChild(pion);
 			addChild(text2)
 			addChild(dobbel)
+		}
+		/*VRAGEN*/
+		public function bkant1_goed(mEvt:MouseEvent):void
+		{
+			removeChild(bkvraag);
+			removeChild(bkant1);
+			removeChild(bkant2);
+			score++;
+			vraaggesteld = false;
+		}
+		
+		public function bkant2_fout(mEvt:MouseEvent):void
+		{
+			removeChild(bkvraag);
+			removeChild(bkant1);
+			removeChild(bkant2);
+			vraaggesteld = false;
 		}
 		
 		public function frameLoop(e:Event):void
@@ -246,6 +297,18 @@
 				scriptLoader.addEventListener("complete", onC);
 				scriptLoader.load(scriptRequest);
 				stage.frameRate = 0;
+			}
+			
+			if (pion.x < 360 && pion.x > 260 && pion.y < 115 && total == 0 && vraaggesteld == false)
+			{
+				vraaggesteld = true;
+			}
+			
+			if (vraaggesteld = true)
+			{
+				addChild(bkvraag);
+				addChild(bkant1);
+				addChild(bkant2);
 			}
 		}
 		function onC(e) 
