@@ -17,17 +17,75 @@
 		var gewonnen:Gewonnen = new Gewonnen();
 		var text2:Textfield2 = new Textfield2();
 		var beweeg:Boolean = new Boolean();
-		var boordGroote:int = 15;
+		var boordGroote:int = 10;
 		var beginX:int = 30;
 		var beginY:int = 30;
 		var direct:int = 90;
 		var total:int = 0;
-		var hoekWidth:int = 50;
-		var hoekHeight:int = 50;
+		var hoekWidth:int = 80;
+		var hoekHeight:int = 80;
 		var hoek:int = 0;
+		var burgerking:Burgerking = new Burgerking();
+		var cena:Cena = new Cena();
+		var mcdonalds:Mcdonalds = new Mcdonalds();
+		var mediamarkt:Mediamarkt = new Mediamarkt();
+		var jumbo:Jumbo = new Jumbo();
+		var primark:Primark = new Primark();
+		var macelaviv:Macelaviv = new Macelaviv();
+		var bartsmit:Bartsmit = new Bartsmit();
+		var euromast:Euromast = new Euromast();
+
 		
 		public function script() 
 		{	
+		
+			/*Foto's*/
+			burgerking.x = beginX + hoekWidth * 3;
+			burgerking.y = beginY;
+			burgerking.height = hoekHeight;
+			burgerking.width = hoekWidth;
+			
+			cena.x = beginX + hoekWidth * 6;
+			cena.y = beginY;
+			cena.height = hoekHeight;
+			cena.width = hoekWidth;
+			
+			mcdonalds.x = beginX + hoekWidth * boordGroote - 80;
+			mcdonalds.y = beginY + hoekHeight * 6;
+			mcdonalds.height = hoekHeight;
+			mcdonalds.width = hoekWidth;
+			
+			mediamarkt.x = beginX + hoekWidth * boordGroote - 80;
+			mediamarkt.y = beginY + hoekHeight * 3;
+			mediamarkt.height = hoekHeight;
+			mediamarkt.width = hoekWidth;
+			
+			jumbo.x = beginX + hoekWidth * 6;
+			jumbo.y = beginY + hoekHeight * 9;
+			jumbo.height = hoekHeight;
+			jumbo.width = hoekWidth;
+			
+			primark.x = beginX + hoekWidth * 12;
+			primark.y = beginY + hoekHeight * 14;
+			primark.height = hoekHeight;
+			primark.width = hoekWidth;
+			
+			macelaviv.x = beginX + hoekWidth * 3;
+			macelaviv.y = beginY + hoekHeight * 9;
+			macelaviv.height = hoekHeight;
+			macelaviv.width = hoekWidth;
+			
+			bartsmit.x = beginX;
+			bartsmit.y = beginY + hoekHeight * 3;
+			bartsmit.height = hoekHeight;
+			bartsmit.width = hoekWidth;
+			
+			euromast.x = beginX;
+			euromast.y = beginY + hoekHeight * 6;
+			euromast.height = hoekHeight;
+			euromast.width = hoekWidth;
+			/*Einde Foto's*/
+			
 			dobbel.x = beginX+boordGroote*hoekWidth/2;
 			dobbel.y = beginY+boordGroote*hoekWidth/2;
 			
@@ -42,10 +100,20 @@
 			
 			dobbel.stop();
 			
-			drawBoard(boordGroote, beginX ,beginY, hoekWidth, hoekHeight);
-			
 			stage.addEventListener(Event.ENTER_FRAME, frameLoop);
 			dobbel.addEventListener(MouseEvent.CLICK, dobbelClick);
+			
+			addChild(euromast);
+			addChild(bartsmit);
+			addChild(macelaviv);
+			addChild(primark);
+			addChild(jumbo);
+			addChild(mcdonalds);
+			addChild(mediamarkt);
+			addChild(cena);
+			addChild(burgerking);
+			
+			drawBoard(boordGroote, beginX ,beginY, hoekWidth, hoekHeight);
 			
 			addChild(pion);
 			addChild(text2)
