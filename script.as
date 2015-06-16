@@ -72,9 +72,11 @@
 		var euromastAntwoord2:EuromastAntwoord2 = new EuromastAntwoord2();
 		var score:int = 0
 		var vraaggesteld:Boolean = false;
-		var randomNummer:int = 1 // default == 7
+		var randomNummer:int = 7 // default == 7
 		var beginNaam:BeginNaam = new BeginNaam();
 		var naamVeld:TextField = new TextField();
+		var tremLoadingloop:TremLoadingloop = new TremLoadingloop();
+		var naamInvullenError:NaamInvullenError = new NaamInvullenError();
 		
 		public function script() 
 		{	
@@ -201,7 +203,7 @@
 			
 			// other positioning
 			beginknop.x = 450;
-			beginknop.y = 600;
+			beginknop.y = 650;
 			
 			naamVeld.x = 550;
 			naamVeld.y = 430;
@@ -209,7 +211,9 @@
 			naamVeld.width = 270;
 			naamVeld.type = TextFieldType.INPUT;
 			naamVeld.background = true;
-			naamVeld.text = "";
+			
+			naamInvullenError.x = 450;
+			naamInvullenError.y = 525;
 			
 			beginNaam.x = 220;
 			beginNaam.y = 450;
@@ -248,8 +252,10 @@
 			euromastAntwoord2.addEventListener(MouseEvent.CLICK, euromastAntwoord2_goed);
 			macelavivAntwoord1.addEventListener(MouseEvent.CLICK, macelavivAntwoord1_goed);
 			macelavivAntwoord2.addEventListener(MouseEvent.CLICK, macelavivAntwoord2_fout);
+			//tremLoadingloop.addEventListener(Event.COMPLETE, completeHandler);
 			
 			//startscherm
+			tremLoadingloop.play(0, 9999);
 			addChild(beginscherm);
 			addChild(beginknop);
 			addChild(naamVeld);
@@ -257,11 +263,12 @@
 		}
 		
 		// START OF GAME
-		/*if (naamVeld.text == !"")
-		{*/
-			public function begin(mEvt:MouseEvent):void
+		
+		public function begin(mEvt:MouseEvent):void
+		{
+			if (naamVeld.text !== "")
 			{
-				var naam:String = naamVeld.text;
+				var name:String = naamVeld.text;
 				removeChild(beginscherm);
 				removeChild(beginknop);
 				removeChild(naamVeld);
@@ -282,7 +289,11 @@
 				addChild(text2)
 				addChild(dobbel)
 			}
-		//}
+			else
+			{
+				addChild(naamInvullenError);
+			}
+		}
 		
 		// VRAGEN
 		public function bkant1_goed(mEvt:MouseEvent):void
