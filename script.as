@@ -1,5 +1,6 @@
 ﻿package  
 {
+	// imports
 	import flash.display.MovieClip;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
@@ -12,7 +13,7 @@
 	
 	public class script extends MovieClip 
 	{
-
+		// variable declarations
 		var dobbel:Dobbelsteen = new Dobbelsteen();
 		var pion:Pion = new Pion();
 		var totalX:int = 15;
@@ -47,11 +48,11 @@
 		var bkant2:Bkant2 = new Bkant2();
 		var score:int = 0
 		var vraaggesteld:Boolean = false;
+		var randomNummer:int = 1 // default == 7
 		
 		public function script() 
 		{	
-		
-			/*Foto's*/
+			//Foto positions
 			burgerking.x = beginX + hoekWidth * 3;
 			burgerking.y = beginY;
 			burgerking.height = hoekHeight;
@@ -102,16 +103,14 @@
 			bkvraag.x = 450;
 			bkvraag.y = 450;
 			
-			/*Einde vragen*/
-			
-			/*Antwoorden*/
+			//Antwoorden
 			bkant1.x = 350;
 			bkant1.y = 500;
 			
 			bkant2.x = 550;
 			bkant2.y = 500;
-			/*Einde antwoorden*/
 			
+			// other positioning
 			beginknop.x = 450;
 			beginknop.y = 500;
 			
@@ -129,16 +128,19 @@
 			
 			dobbel.stop();
 			
+			// listener events
 			stage.addEventListener(Event.ENTER_FRAME, frameLoop);
 			dobbel.addEventListener(MouseEvent.CLICK, dobbelClick);
 			beginknop.addEventListener(MouseEvent.CLICK, begin);
 			bkant1.addEventListener(MouseEvent.CLICK, bkant1_goed);
 			bkant2.addEventListener(MouseEvent.CLICK, bkant2_fout);
 			
+			//startscherm
 			addChild(beginscherm);
 			addChild(beginknop);
 		}
 		
+		// START OF GAME
 		public function begin(mEvt:MouseEvent):void
 		{
 			removeChild(beginscherm);
@@ -159,7 +161,8 @@
 			addChild(text2)
 			addChild(dobbel)
 		}
-		/*VRAGEN*/
+		
+		// VRAGEN
 		public function bkant1_goed(mEvt:MouseEvent):void
 		{
 			removeChild(bkvraag);
@@ -179,8 +182,10 @@
 		
 		public function frameLoop(e:Event):void
 		{
-			//trace("pion-x:" + pion.x + " total-x:" + totalX  + " pion-y:" + pion.y + " total-y:" + totalY + " direction:" + direct + " total:" + total + " hoek:" + hoek)
+			trace("pion-x:" + pion.x + " total-x:" + totalX  + " pion-y:" + pion.y + " total-y:" + totalY + " direction:" + direct + " total:" + total + " hoek:" + hoek + " vraag:" + vraaggesteld)
 			text2.textfield2.text = "Aantal zetten: " + zetten
+			
+			// direction
 			if(direct == 90 && total != 0)
 			{
 				pion.x++;
@@ -213,6 +218,8 @@
 				total--;
 				dobbel.mouseEnabled = false;
 			}
+			
+			// direction keep moment
 			if(total == 0)
 			{
 				dobbel.mouseEnabled = true;
@@ -284,6 +291,8 @@
 					direct = 0
 				}
 			}
+			
+			// win and submit score
 			if ((pion.y > beginY && pion.y < beginY+ 30)&&(pion.x > beginX && pion.x < beginX+30))
 			{
 				total = 0;
@@ -299,23 +308,22 @@
 				stage.frameRate = 0;
 			}
 			
-			if (pion.x < 360 && pion.x > 260 && pion.y < 115 && total == 0 && vraaggesteld == false)
+			if (pion.x > 260 && pion.x < 270 && pion.y < 115 && total < 40 && vraaggesteld == false)
 			{
 				vraaggesteld = true;
-			}
-			
-			if (vraaggesteld = true)
-			{
 				addChild(bkvraag);
 				addChild(bkant1);
 				addChild(bkant2);
 			}
+			
 		}
 		function onC(e) 
 		{
 			var someLoader:Loader = new Loader();
 			addChild(someLoader);
 		}
+		
+		// function odd
 		function odd(nummer:int):Boolean
 		{
 			//check if the number is odd or even
@@ -328,6 +336,8 @@
 				return true;
 			}
 		}
+		
+		// function drawBoard
 		public function drawBoard(lengte:int, dobbelX:int, dobbelY:int, dobbelWidth:int, dobbelHeight:int):void
 		{
 			var rechthoek:Shape = new Shape()
@@ -375,9 +385,10 @@
 			}
 		}
 		
-		public function dobbelRandom():int
+		// function dobbelRandom
+		public function dobbelRandom():int 
 		{
-			var getalRandom:int = Math.floor(Math.random()*7);
+			var getalRandom:int = Math.floor(Math.random()* randomNummer);
 			if (getalRandom < 1)
 			{
 				getalRandom = 1;
@@ -387,7 +398,8 @@
 			return(getalRandom);
 		}
 		
-		public function dobbelClick(mE:MouseEvent):void
+		// function dobbelClick
+		public function dobbelClick(mE:MouseEvent):void 
 		{
 			var randomGetal:int = dobbelRandom();
 			zetten++;
